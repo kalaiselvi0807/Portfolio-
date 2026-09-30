@@ -1,42 +1,79 @@
+// ===============================
+// DARK / LIGHT MODE
+// ===============================
 
-// ================= MOBILE MENU =================
+const themeButton = document.getElementById("themeButton");
 
-function toggleMenu() {
+themeButton.addEventListener("click", function () {
 
-    const navLinks = document.getElementById("navLinks");
+    document.body.classList.toggle("dark");
 
-    navLinks.classList.toggle("active");
+    if (document.body.classList.contains("dark")) {
+        themeButton.textContent = "☀️";
+    } else {
+        themeButton.textContent = "🌙";
+    }
 
-}
+});
 
 
-// Close menu after clicking a navigation link
+// ===============================
+// ACTIVE NAVIGATION
+// ===============================
 
-const navItems = document.querySelectorAll(".nav-links a");
+const navLinks = document.querySelectorAll(".nav-links a");
 
-navItems.forEach(function(item) {
+navLinks.forEach(function(link) {
 
-    item.addEventListener("click", function() {
+    link.addEventListener("click", function() {
 
-        document.getElementById("navLinks").classList.remove("active");
+        navLinks.forEach(function(item) {
+            item.classList.remove("active");
+        });
+
+        this.classList.add("active");
 
     });
 
 });
 
 
-// ================= CURRENT YEAR =================
+// ===============================
+// SIMPLE SCROLL ANIMATION
+// ===============================
 
-// Automatically updates footer year
+const sections = document.querySelectorAll(".section");
 
-const currentYear = new Date().getFullYear();
+const observer = new IntersectionObserver(
 
-const footerText = document.querySelector("footer p");
+    function(entries) {
 
-if (footerText) {
+        entries.forEach(function(entry) {
 
-    footerText.innerHTML =
-        "© " + currentYear +
-        " Kalaiselvi V. All Rights Reserved.";
+            if (entry.isIntersecting) {
 
-}
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold: 0.1
+    }
+
+);
+
+
+sections.forEach(function(section) {
+
+    section.style.opacity = "0";
+    section.style.transform = "translateY(30px)";
+    section.style.transition = "0.7s";
+
+    observer.observe(section);
+
+});
