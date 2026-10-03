@@ -1,6 +1,45 @@
-// ===============================
-// DARK / LIGHT MODE
-// ===============================
+/* =====================================================
+   MOBILE MENU
+===================================================== */
+
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", function () {
+
+    navLinks.classList.toggle("show");
+
+    if (navLinks.classList.contains("show")) {
+        menuBtn.textContent = "✕";
+    } else {
+        menuBtn.textContent = "☰";
+    }
+
+});
+
+
+/* =====================================================
+   CLOSE MOBILE MENU AFTER CLICK
+===================================================== */
+
+const links = document.querySelectorAll(".nav-links a");
+
+links.forEach(function (link) {
+
+    link.addEventListener("click", function () {
+
+        navLinks.classList.remove("show");
+
+        menuBtn.textContent = "☰";
+
+    });
+
+});
+
+
+/* =====================================================
+   DARK / LIGHT MODE
+===================================================== */
 
 const themeButton = document.getElementById("themeButton");
 
@@ -9,51 +48,88 @@ themeButton.addEventListener("click", function () {
     document.body.classList.toggle("dark");
 
     if (document.body.classList.contains("dark")) {
+
         themeButton.textContent = "☀️";
+
+        localStorage.setItem("theme", "dark");
+
     } else {
+
         themeButton.textContent = "🌙";
+
+        localStorage.setItem("theme", "light");
+
     }
 
 });
 
 
-// ===============================
-// ACTIVE NAVIGATION
-// ===============================
+/* =====================================================
+   REMEMBER THEME
+===================================================== */
 
-const navLinks = document.querySelectorAll(".nav-links a");
+const savedTheme = localStorage.getItem("theme");
 
-navLinks.forEach(function(link) {
+if (savedTheme === "dark") {
 
-    link.addEventListener("click", function() {
+    document.body.classList.add("dark");
 
-        navLinks.forEach(function(item) {
-            item.classList.remove("active");
-        });
+    themeButton.textContent = "☀️";
 
-        this.classList.add("active");
+}
 
+
+/* =====================================================
+   BACK TO TOP BUTTON
+===================================================== */
+
+const topButton = document.getElementById("topButton");
+
+window.addEventListener("scroll", function () {
+
+    if (window.scrollY > 500) {
+
+        topButton.style.display = "block";
+
+    } else {
+
+        topButton.style.display = "none";
+
+    }
+
+});
+
+
+topButton.addEventListener("click", function () {
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
     });
 
 });
 
 
-// ===============================
-// SIMPLE SCROLL ANIMATION
-// ===============================
+/* =====================================================
+   SCROLL REVEAL ANIMATION
+===================================================== */
 
-const sections = document.querySelectorAll(".section");
+const animatedElements = document.querySelectorAll(
+    ".education-card, .skills-card, .project-card, .achievement-card, .certificate-card, .hobby, .contact-card, .file-card"
+);
+
 
 const observer = new IntersectionObserver(
 
-    function(entries) {
+    function (entries) {
 
-        entries.forEach(function(entry) {
+        entries.forEach(function (entry) {
 
             if (entry.isIntersecting) {
 
-                entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)";
+                entry.target.classList.add("show");
+
+                observer.unobserve(entry.target);
 
             }
 
@@ -62,18 +138,16 @@ const observer = new IntersectionObserver(
     },
 
     {
-        threshold: 0.1
+        threshold: 0.12
     }
 
 );
 
 
-sections.forEach(function(section) {
+animatedElements.forEach(function (element) {
 
-    section.style.opacity = "0";
-    section.style.transform = "translateY(30px)";
-    section.style.transition = "0.7s";
+    element.classList.add("reveal");
 
-    observer.observe(section);
+    observer.observe(element);
 
 });
